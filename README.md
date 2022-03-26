@@ -40,7 +40,7 @@ Do you enjoy writing and playing time attack games? Then welcome to Story-Factor
 - [Link to LinkedIn](www.linkedin.com/in/millard-chambers-985448228)
 
 * **Samuel Lutz** 
-- [Link to Github](https://samuellutz.github.io/React-Portfolio/)
+- [Link to Github](https://samuellutz.github.io/Portfolio-new/)
 - [Link to LinkedIn](https://www.linkedin.com/in/samuel-lutz-77138020b/)
 - [Link to Portfolio Site](https://www.linkedin.com/in/samuel-lutz-77138020b/)
 
