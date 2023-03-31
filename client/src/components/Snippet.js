@@ -1,18 +1,25 @@
 
 
    
-export default function Snippet({story, text, color}) {
+export default function Snippet({story, text, color, author}) {
 
     const snippetStyle = {
         width: '80%',
         marginLeft: '5%',
-        marginBottom: '5%',
-    
+        // marginBottom: '5%',
+        // backgroundColor: "#ef444422"
         
         
     }
+    const authorStyle = {
+        color: "#444444"
+    }
+    const storyTitleStyle = {
+        marginLeft: '30px',
+        fontSize: '1.4em'
+    }
     const colorStyle = {
-        marginLeft: '5%',
+        marginLeft: '20px',
         color: color
     }
     const divStyle = {
@@ -29,12 +36,22 @@ export default function Snippet({story, text, color}) {
 
     return (
         <section style={snippetStyle}>
-            <a href="#gotostory">{story}</a>
+            
             <div style={divStyle}>
-                <div style={voteStyle}>
+                {/* <div style={voteStyle}>
                     +1
+                   
+                </div> */}
+                <div style={authorStyle}>
+                    <p>{author}</p>
                 </div>
+                 
                 <div>
+                    { story ?
+                        <a style={storyTitleStyle} href="#gotostory">{story}</a>
+                        :
+                        <></>
+                    }
                     <p style={colorStyle}>{text}</p>
                 </div>
             </div>

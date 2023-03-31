@@ -1,6 +1,7 @@
 const {
     Snippet,
-    User
+    User,
+    Story
 } = require('../models');
 const SnippetController = {
 
@@ -15,16 +16,13 @@ const SnippetController = {
     },
 
     //get one Snippet by id
-    getSnippetById({
+    getSnippetByUserName({
         params
     }, res) {
-        Snippet.findOne({
-                _id: params.id
+        Snippet.find({
+                username: params.username
             })
             .select('-__v')
-            .sort({
-                _id: -1
-            })
             .then(dbSnippetData => {
                 if (!dbSnippetData) {
                     res.status(404).json({
@@ -41,28 +39,29 @@ const SnippetController = {
     },
 
     //create Snippet
-    addSnippet({
-        body
-    }, res) {
+    createSnippet({ body }, res) 
+    {
         Snippet.create(body)
+                
+    
             .then((SnippetData) => {
-                return User.findOneAndUpdate(
-                    //create a Snippet using current user
+                
+                return Story.findOneAndUpdate(
                     {
-                        _id: body.userId
+                        storyname: body.storyname
                     }, {
                         $addToSet: {
-                            Snippets: SnippetData._id
+
+                            snippets: SnippetData._id
                         }
-                    }, {
-                        new: true
                     }
                 );
             })
             .then(dbUsersData => {
+                // console.log(dbUsersData)
                 if (!dbUsersData) {
                     res.status(404).json({
-                        message: 'No user found id.'
+                        message: 'No user found'
                     });
                     return;
                 }
@@ -73,6 +72,15 @@ const SnippetController = {
                 res.status(400).json(err);
             });
     },
+
+    async getSnippetsByUser({ body, user:userData }, res) {
+        console.log('getSnippetByUser: ');
+        const snippet = await Snippet.find({ username: userData.username});
+        if(!snippet) {
+            return res.status(404).json({ message: 'No snippet found with this associated name.'})
+        }
+        res.status(200).json(snippet);
+        }
 
     //create reactions
 //     addReaction({

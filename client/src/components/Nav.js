@@ -1,5 +1,6 @@
 import { GlobalContext } from '../App';
 import { useContext } from 'react';
+import Auth from '../utils/auth';
 
 const navStyle = {
     paddingTop: "10px",
@@ -25,9 +26,20 @@ export default function Nav() {
         <nav style={navStyle}>
 
             
-            <a style={aStyle} href="#f">Other Link</a>
-            <a style={aStyle} href="#f" onClick={() => globalState.setGlobalState((prevState) => ({...prevState, homeShow: true}))} >Home</a>
-            <a style={aStyle} href="#f" onClick={() => globalState.setGlobalState((prevState) => ({...prevState, loginShow: true}))} >Login</a>
+            <a style={aStyle} href="#f" onClick={() => globalState.setGlobalState((prevState) => ({...prevState, homeShow: false}))}>Story Factory</a>
+            
+            {Auth.loggedIn() ? (
+                <>
+                    <a style={aStyle} href="#f" onClick={() => globalState.setGlobalState((prevState) => ({...prevState, homeShow: true}))} >Home</a>
+                    <a style={aStyle} href="#f" onClick={Auth.logout} >Logout</a>
+                </>
+            ) : (
+                <>
+                  <a style={aStyle} href="#f" onClick={() => globalState.setGlobalState((prevState) => ({...prevState, loginShow: true}))} >Home</a>
+                  <a style={aStyle} href="#f" onClick={() => globalState.setGlobalState((prevState) => ({...prevState, loginShow: true}))} >Login</a>
+                </>   
+            
+            )}
       
         </nav>
     );

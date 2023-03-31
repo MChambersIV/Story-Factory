@@ -1,47 +1,13 @@
 import Snippet from './Snippet';
+import Create from './Create';
+import { useState, useEffect, createContext } from 'react';
+import { getAllStories, getMe, getSnippetByUserName } from '../utils/API';
+import Auth from '../utils/auth';
+// import { params } from 'react-router-dom';
 
-const tempData = [
-    {
-        id: 1,
-       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed hendrerit libero. Morbi tristique, quam nec condimentum mattis, enim turpis aliquam ligula, non efficitur ex dolor nec metus. Pellentesque purus massa, pretium a mollis non, scelerisque vel elit. Aliquam tortor nisi, ultricies quis elementum non, faucibus ut neque." 
-    },
-    {
-        id: 2,
-        text: "Aenean a dui venenatis, luctus erat ut, pulvinar est. Sed pretium mattis erat eu aliquam. Vestibulum diam velit, faucibus ac urna et, varius accumsan diam. Maecenas vitae mi sem. Vestibulum maximus, ex id porttitor tristique, elit purus laoreet enim, sed semper ante nisl eu tortor." 
-    },
-    {
-        id: 3,
-        text: "Vestibulum accumsan egestas enim. Maecenas quis turpis scelerisque, pulvinar ipsum nec, molestie massa. Aenean iaculis eleifend sapien, in feugiat purus mattis sed. Curabitur et augue at orci efficitur commodo. Donec libero velit, scelerisque sit amet lobortis nec, aliquam id ipsum." 
-    },
-    {
-         id: 4,
-         text: "Aenean a dui venenatis, luctus erat ut, pulvinar est. Sed pretium mattis erat eu aliquam. Vestibulum diam velit, faucibus ac urna et, varius accumsan diam. Maecenas vitae mi sem. Vestibulum maximus, ex id porttitor tristique, elit purus laoreet enim, sed semper ante nisl eu tortor." 
-    },
-    {
-         id: 5,
-         text: "Vestibulum accumsan egestas enim. Maecenas quis turpis scelerisque, pulvinar ipsum nec, molestie massa. Aenean iaculis eleifend sapien, in feugiat purus mattis sed. Curabitur et augue at orci efficitur commodo. Donec libero velit, scelerisque sit amet lobortis nec, aliquam id ipsum." 
-    },    
-    {
-        id: 6,
-       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed hendrerit libero. Morbi tristique, quam nec condimentum mattis, enim turpis aliquam ligula, non efficitur ex dolor nec metus. Pellentesque purus massa, pretium a mollis non, scelerisque vel elit. Aliquam tortor nisi, ultricies quis elementum non, faucibus ut neque." 
-    },
-    {
-        id: 7,
-        text: "Aenean a dui venenatis, luctus erat ut, pulvinar est. Sed pretium mattis erat eu aliquam. Vestibulum diam velit, faucibus ac urna et, varius accumsan diam. Maecenas vitae mi sem. Vestibulum maximus, ex id porttitor tristique, elit purus laoreet enim, sed semper ante nisl eu tortor." 
-    },
-    {
-        id: 8,
-        text: "Vestibulum accumsan egestas enim. Maecenas quis turpis scelerisque, pulvinar ipsum nec, molestie massa. Aenean iaculis eleifend sapien, in feugiat purus mattis sed. Curabitur et augue at orci efficitur commodo. Donec libero velit, scelerisque sit amet lobortis nec, aliquam id ipsum." 
-    },
-    {
-         id: 9,
-         text: "Aenean a dui venenatis, luctus erat ut, pulvinar est. Sed pretium mattis erat eu aliquam. Vestibulum diam velit, faucibus ac urna et, varius accumsan diam. Maecenas vitae mi sem. Vestibulum maximus, ex id porttitor tristique, elit purus laoreet enim, sed semper ante nisl eu tortor." 
-    },
-    {
-         id: 10,
-         text: "Vestibulum accumsan egestas enim. Maecenas quis turpis scelerisque, pulvinar ipsum nec, molestie massa. Aenean iaculis eleifend sapien, in feugiat purus mattis sed. Curabitur et augue at orci efficitur commodo. Donec libero velit, scelerisque sit amet lobortis nec, aliquam id ipsum." 
-    }
-]
+
+export const HomeContext = createContext();
+
 
 const textColors = [
     "#ef4444",
@@ -74,23 +40,105 @@ const outLine = {
     padding: '10px',
 }
 
+const buttonDivStyle = {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '50px',
+    marginTop: '50px',
+}
+const buttonStyle = {
+    fontSize: '2em',
+    padding: '0.5em'
+}
+
 export default function Home() {
+    const [createStart, setCreateStart] = useState(false);
+    // user result 96
+    const [userResult, setUserResult] = useState(0);
+    const [userSnippets, setUserSnippets] = useState(null);
+   
+    // console.log(createStart)
+    const returnUser = async () => {
+        
+        try {
+            const token = Auth.retrieveToken();
+
+            console.log("return user token:", token)
+
+            if(!token) {
+                console.log('Problem with token found.')
+            }
+
+            const response = await getMe(token);
+
+            const result = await response.json();
+
+            // console.log("console log of result: ", result);
+
+            //hands off response 116
+            setUserResult(result);
+        } catch (error){
+            console.error(error);
+        }
+    }
+    const getUserSnippets = async () => {
+        try {
+            const response = await getSnippetByUserName(userResult.username);
+            
+            
+            const result = await response.json();
+            // console.log(result);
+            setUserSnippets(result);
+        } catch (error){
+            console.error(error);
+        }
+    }
+
+    //calls return user function 122
+    // returnUser();
+    useEffect(()=>{
+
+        returnUser();
+        
+    }, [createStart]);
+
+    useEffect(()=>{
+        getUserSnippets();
+
+    }, [userResult] )
+
+
+
+    // console.log("xxx", userSnippets);
+
+    
     return (
         <section style={homeStyle}>
-            <h1>Welcome back [User]</h1>
-
-            <div style={divStyle}>
-                <h2>Contributions</h2>
-                {tempData.map((snippet, index) => (
-                    <div key={index}>
-                    <Snippet  story={"default story"} text={snippet.text} color={textColors[index]} />
+            
+            {createStart ?
+                <HomeContext.Provider value={ {createStart, setCreateStart} }>
+                    <Create user={userResult.username} /> 
+                </HomeContext.Provider>
+                :
+                //  This is the name rendered to the page 133
+                <div>                  
+                    <h1>Welcome back {userResult.username}</h1>
+                    <div style={buttonDivStyle}>
+                        <button style={buttonStyle} onClick={() => setCreateStart(true)}>Contribute to a Story!</button>
                     </div>
 
-                 ))}
-
-
-            </div>
-            
+                    <div style={divStyle}>
+                        <h2>Contributions</h2>
+                        {userSnippets?.map((snippet, index) => (
+                            <div key={index}>
+                         
+                            <Snippet story={snippet.storyname} text={snippet.snippetText} color={textColors[6]} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            }
             
 
 

@@ -1,6 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { GlobalContext } from '../App';
+<<<<<<< HEAD
 import { createUser } from '../utils/api';
+=======
+import { createUser, loginUser } from '../utils/API';
+import Auth from '../utils/auth';
+>>>>>>> 171d139a5a1adbb0299a2b756d33d09e30b5cc8f
 
 
 
@@ -26,8 +31,9 @@ export default function Login() {
         border: "1px solid #ffffff",
 
         backgroundColor: '#000000bb',
-        WebkitBackdropFilter: 'blur(4px)',
-        BackdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(6px)',
+        MozBackdropFilter: 'blur(6px)',
+        backdropFilter: 'blur(6px)',
         height: '300px',
         width: '80vw',
         padding: '20px',
@@ -53,8 +59,7 @@ export default function Login() {
         // Getting the value and name of the input which triggered the change
         const { name, value } = e.target;
 
-        // Ternary statement that will call either setFirstName or setLastName based on what field the user is typing in
-        // return name === 'userName' ? setLoginUserName(value) : setLoginPassword(value);
+      
 
         switch (name) {
             case 'loginUserName' : {
@@ -77,9 +82,30 @@ export default function Login() {
     
     };
 
-    const handleLoginSubmit = (e) => {
+    const handleLoginSubmit = async (event) => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
-        e.preventDefault();
+        event.preventDefault();
+
+        const username = loginUserName;
+        const password = loginPassword;
+
+        const data = { username, password }
+
+        try { 
+            const response = await loginUser(data);
+
+            if (!response.ok) {
+                throw new Error('BORKED')
+            }
+
+            const {token, user } = await response.json();
+            console.log(user);
+            Auth.login(token);
+        } catch(error) {
+            console.error(error)
+        }
+
+        
     
         // Alert the user their first and last name, clear the inputs
         // alert(`Hello ${userName}`);
@@ -88,8 +114,9 @@ export default function Login() {
         globalState.setGlobalState((prevState) => ({...prevState, loginShow: false}));
     };
 
-    const handleSignupSubmit = (e) => {
+    const handleSignupSubmit = async (event) => {
         // Preventing the default behavior of the form submit (which is to refresh the page)
+<<<<<<< HEAD
         e.preventDefault();
         const username = signupUserName;
         const password = signupPassword;
@@ -100,6 +127,31 @@ export default function Login() {
 
        
     
+=======
+        event.preventDefault();
+        
+        const username = signupUserName;
+        const password = signupPassword;
+
+        const data =  { username, email, password }
+        try {
+            const response = await createUser(data);
+            
+            if (!response.ok) {
+                throw new Error('Error occurred!');
+            }
+
+            console.log(response)
+            
+            const { token, user } = await response.json();
+            console.log(user);
+            Auth.login(token);
+        } catch (error) {
+            console.log(error);
+            
+        }
+
+>>>>>>> 171d139a5a1adbb0299a2b756d33d09e30b5cc8f
         // Alert the user their first and last name, clear the inputs
         // alert(`Hello ${userName}`);
         setSignupUserName('');

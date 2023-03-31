@@ -2,7 +2,7 @@
 import Nav from './Nav';
 import { GlobalContext } from '../App';
 import { useContext } from 'react';
-
+import Typewriter from 'typewriter-effect'
 
 const headerStyle = {
     paddingTop: "10px",
@@ -26,7 +26,13 @@ export default function Header() {
 
     return (
         <header style={headerStyle}>
-            <div style={titleStyle} onClick={() => globalState.setGlobalState((prevState) => ({...prevState, homeShow: false}))}>Story Factory</div>
+            <div style={titleStyle} onClick={() => globalState.setGlobalState((prevState) => ({...prevState, homeShow: false}))}>
+                <Typewriter
+                    onInit={(typewriter) => {
+                        typewriter.typeString('Story Factory')
+                        .start();
+                    }}/>
+            </div>
             <Nav />
       
         </header>

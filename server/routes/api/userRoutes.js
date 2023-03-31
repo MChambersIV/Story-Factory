@@ -7,14 +7,20 @@ const {
   updateUser,
   deleteUser,
   addToFriendList,
-  removefromFriendList
+  removefromFriendList,
+  loginUser,
 } = require('../../controllers/userController');
 
+const { authMiddleWare } = require('../../utils/auth');
+
 // Set up GET all and POST at /api/users. Provide name of controller as callback
+router.route('/').get(getAllUsers).post(createUser);
+
+router.route('/me').get(authMiddleWare, getUserById);
+
 router
-  .route('/')
-  .get(getAllUsers)
-  .post(createUser);
+  .route('/login')
+  .post(loginUser);
 
 // Set up GET one, PUT, and DELETE at /api/users/<id>
 router

@@ -17,19 +17,5 @@ if (process.env.NODE_ENV === 'production') {
 app.use(routes);
 
 db.once('open', () => {
-  app.listen(PORT, () => console.log(`Now listening on localhost: ${PORT}`));
+  app.listen(PORT, () => console.log(`Now listening on localhost:${PORT}`));
 });
-
-
-const User = require('./models/User')
-const userInput = {
-  username: 'jmar777',
-    password: 'Password123',
-    email: 'jmar777@gmail.com'
-}
-const user = new User(userInput);
-user.save((err,document)=>{
-  if(err)
-  console.log(err);
-  console.log(document);
-})

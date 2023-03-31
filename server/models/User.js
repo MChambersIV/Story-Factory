@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const { min } = require('moment');
 SALT_WORK_FACTOR = 10;
 
-var UserSchema = new Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         unique: true,
@@ -45,11 +45,11 @@ var UserSchema = new Schema({
     id: false
 });
 
-UserSchema.virtual('friendCount').get(function () {
+userSchema.virtual('friendCount').get(function () {
     return this.friends.length;
 });
 
-UserSchema.pre('save', function(next){
+userSchema.pre('save', function(next){
     if (!this.isModified('password'))
         return next();
     bcrypt.hash(this.password,10,(err,passwordHash)=>{
@@ -58,21 +58,14 @@ UserSchema.pre('save', function(next){
         this.password = passwordHash;
             next();
     })
-})
+});
 
-UserSchema.methods.comparePassword = function(password,cb){
-        bcrypt.compare(password,this.password,(err,isMatch)=>{
-            if(err)
-                return cb (err);
-            else {
-                if(!isMatch)
-                    return cb(null, isMatch)
-                return cb(null,this);
-            }
-        })
-}
+userSchema.methods.comparePassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+};
+  
 
 
-const User = model('User', UserSchema);
+const User = model('User', userSchema);
 
 module.exports = User;

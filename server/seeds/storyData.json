@@ -1,0 +1,28 @@
+[
+{
+    "storyname" : "Meadow",
+    "prompt" : "You awaken in a meadow with no idea of how you got there, now you",
+    "snippets" : []
+
+},{
+    "storyname" : "Cabin",
+    "prompt" : "You stumble apon an abandoned cabin in the woods",
+    "snippets" : []
+
+},{
+    "storyname" : "Book",
+    "prompt" : "You find an old strange book that you have never seen before. As you open it",
+    "snippets" : []
+
+},{
+    "storyname" : "Phone",
+    "prompt" : "You get a call from an unknown number. when you answer it it's",
+    "snippets" : []
+
+},{
+    "storyname" : "Tech",
+    "prompt" : "you awaken to find that technology no longer works, your first step is to",
+    "snippets" : []
+
+}
+]

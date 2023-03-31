@@ -14,12 +14,11 @@ const SnippetSchema = new Schema({
 
     },
     
-    // storyname: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Story',
-    //     required: true,
+    storyname: {
+        type: String,
+        ref: 'Story',
 
-    // },
+    },
     // reactions: [reactionSchema]
 });
 
